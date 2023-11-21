@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoginScreeen } from '../pages/LoginScreeen';
 import { RegisterScreen } from '../pages/RegisterScreen';
+import { AuthContext } from '../context/chat/AuthContext';
+import { HomeScreen } from '../pages/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,10 +16,23 @@ const  globalScreenOption = {
 }
  
 export const StackNavigation = () => {
+
+  const {status} = useContext(AuthContext)
   return (
     <Stack.Navigator screenOptions={globalScreenOption}>
-      <Stack.Screen name="Login" component={LoginScreeen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
+
+      {
+        
+        (status !== 'authenticated')
+          ? 
+          <>
+            <Stack.Screen name="Login" component={LoginScreeen} />
+            <Stack.Screen name="Register" component={RegisterScreen} /> 
+          </>
+          : <Stack.Screen name="home" component={HomeScreen} />
+
+      }
+   
     </Stack.Navigator>
   );
 }

@@ -1,11 +1,15 @@
 
 import React = require('react')
-import { Text, View } from 'react-native'
+import { ScrollView, StatusBar, Text, View } from 'react-native'
+import { CustomListItems } from '../components/CustomListItems'
 
 export const HomeScreen = () => {
   return (
     <View>
-        <Text>Home screen</Text>
+      <StatusBar backgroundColor='#fff' barStyle='dark-content' />
+       <ScrollView>
+        <CustomListItems/>
+       </ScrollView>
     </View>
   )
 }

@@ -1,16 +1,21 @@
+import React = require('react')
+import { useLayoutEffect,useEffect, useState, useContext } from 'react';
 import { StackScreenProps } from '@react-navigation/stack'
 import { Button, Input, Text } from '@rneui/base'
-import React, { useLayoutEffect, useState } from 'react'
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, View, Keyboard, Alert } from 'react-native';
+import { AuthContext } from '../context/chat/AuthContext';
+
 
 interface Props extends StackScreenProps<any,any>{}
 
 export const RegisterScreen = ({navigation}:Props) => {
 
-   const [name, setName] = useState('')
+  const {singUp, removeError, errorMessage} = useContext(AuthContext)
+
+   const [nombre, setnombre] = useState('')
    const [email, setEmail] = useState('')
    const [password, setPassword] = useState('')
-   const [imageURL, setImageURL] = useState('')
+   const [imageUrl, setImageUrl] = useState('')
 
    useLayoutEffect(()=> {
     navigation.setOptions({
@@ -18,8 +23,27 @@ export const RegisterScreen = ({navigation}:Props) => {
     })
    },[navigation])
 
-   const register = () => {
 
+   
+  useEffect(() => {
+    if(errorMessage.length === 0) return;
+
+    Alert.alert(
+      'El gmail ya esta siendo ussado',
+      errorMessage,
+      [
+        {
+          text:'Ok',
+          onPress: removeError
+        }
+      ]
+    )
+},[errorMessage])
+
+   const register = () => {
+      Keyboard.dismiss()
+
+      singUp({email, password, nombre, imageUrl})
    }
 
   return (
@@ -29,11 +53,11 @@ export const RegisterScreen = ({navigation}:Props) => {
         </Text>
         <View style={styles.inputContainer}>
         <Input
-            placeholder="full name"
+            placeholder="full nombre"
             autoFocus 
             keyboardType='default'
-            value={name}
-            onChangeText={text => setName(text)}
+            value={nombre}
+            onChangeText={text => setnombre(text)}
           />
         
         <Input
@@ -54,8 +78,8 @@ export const RegisterScreen = ({navigation}:Props) => {
             placeholder="Profile Picture URL (optional)"
             autoFocus 
             secureTextEntry
-            value={imageURL}
-            onChangeText={text => setImageURL(text)}
+            value={imageUrl}
+            onChangeText={text => setImageUrl(text)}
             onSubmitEditing={register}
         />
         </View>

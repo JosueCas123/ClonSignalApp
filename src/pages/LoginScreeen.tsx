@@ -1,9 +1,10 @@
 
-import React,{useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { Button, Image } from "@rneui/base";
-import { StatusBar, StyleSheet, Text, View, KeyboardAvoidingView } from "react-native"
+import { StatusBar, StyleSheet, Text, View, KeyboardAvoidingView, Alert, Keyboard } from "react-native"
 import { Input } from "@rneui/themed";
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../context/chat/AuthContext';
 
 
 
@@ -12,10 +13,33 @@ export const LoginScreeen = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword]  = useState('')
+  const {signIn, errorMessage, removeError} =  useContext(AuthContext)
+
   const navigation = useNavigation()
 
-  const singIn = () => {
-    console.log(email, password)
+  useEffect(() => {
+    if(errorMessage.length === 0) return;
+
+    Alert.alert(
+      'Login failed',
+      errorMessage,
+      [
+        {
+          text:'Ok',
+          onPress: removeError
+        }
+      ]
+    )
+
+
+  },[errorMessage])
+
+  const singIn = async() => {
+   
+    Keyboard.dismiss()
+    
+    signIn({email, password})
+
 
   }
 
@@ -40,6 +64,7 @@ export const LoginScreeen = () => {
             autoFocus 
             value={email}
             onChangeText={text => setEmail(text)}
+            onSubmitEditing={singIn}
           />
           <Input
             placeholder="Password"
@@ -47,6 +72,7 @@ export const LoginScreeen = () => {
             autoFocus 
             value={password}
             onChangeText={text => setPassword(text)}
+            onSubmitEditing={singIn}
           />
         </View>
         <Button 
@@ -54,6 +80,7 @@ export const LoginScreeen = () => {
           title="Login" 
           onPress={singIn}
         />
+
         <Button 
           containerStyle={styles.button}
           title="Register" 
