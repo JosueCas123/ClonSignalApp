@@ -3,7 +3,7 @@ import { useLayoutEffect,useEffect, useState, useContext } from 'react';
 import { StackScreenProps } from '@react-navigation/stack'
 import { Button, Input, Text } from '@rneui/base'
 import { KeyboardAvoidingView, StyleSheet, View, Keyboard, Alert } from 'react-native';
-import { AuthContext } from '../context/chat/AuthContext';
+import { AuthContext } from '../context/auth/AuthContext';
 
 
 interface Props extends StackScreenProps<any,any>{}

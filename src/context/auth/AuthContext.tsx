@@ -79,6 +79,8 @@ export const AuthProvider = ({children}:any) => {
             await AsyncStorage.setItem('token', data.token)
 
         } catch (error:any) {
+            console.log(error)
+            
             dispatch({
                 type:'addError',
                 payload: error.response.data.msg || 'Informacion incorrecta'

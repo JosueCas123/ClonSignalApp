@@ -2,15 +2,42 @@ import { useNavigation } from '@react-navigation/native';
 import { Avatar, ListItem, Text } from '@rneui/base'
 import React, { useContext, useLayoutEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { AuthContext } from '../context/chat/AuthContext';
+import { AuthContext } from '../context/auth/AuthContext';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { ChatContext } from '../context/chat/ChatContext';
+import { types } from '../types/types';
+import { signalApi } from '../api/singnalApi';
 
-export const CustomListItems = () => {
+interface Props {
+    usuairoList:any
+}
 
-   const {user, logOut} =  useContext(AuthContext)
+export const CustomListItems = ({usuairoList}:Props) => {
 
-
+    
     const navigation = useNavigation()
+    const {user, logOut} =  useContext(AuthContext)
+    const {dispatch} = useContext(ChatContext)
+
+    const {uid}= usuairoList
+    // Verificar si usuairoList.imageUrl es una cadena no vacía antes de usarla
+  const imageUrl = usuairoList.imageUrl.trim() !== '' ? usuairoList.imageUrl : 'URL_POR_DEFECTO';
+ 
+  const onClick = async() => {
+    console.log(uid)
+    dispatch({
+        type:types.activarChat,
+        payload: uid
+    })
+    //cargar los mensajes
+    const resp = await signalApi.get(`/mensaje/${uid}`)
+    console.log('RESPUESTA API',resp.data.mensajes)
+    dispatch({
+        type:types.cargarMensajes,
+        payload: resp.data.mensajes
+    })
+    navigation.navigate('chat')
+  }
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -25,7 +52,7 @@ export const CustomListItems = () => {
                             <Avatar
                                 rounded
                                 source={{
-                                    uri: user!.imageUrl
+                                    uri: user?.imageUrl
                                 }}
                             />
                         </TouchableOpacity>
@@ -60,31 +87,36 @@ export const CustomListItems = () => {
             )
         })
     },[])
+    return (
+        <TouchableOpacity
+          onPress={onClick}
+          activeOpacity={0.5}
+          style={styles.touchable}
 
-  return (
-   <ListItem>
-        <Avatar
-            rounded
-            source={{
-                uri: 'https://media.licdn.com/dms/image/D4E35AQGw882TWXDbRg/profile-framedphoto-shrink_400_400/0/1700486544823?e=1701147600&v=beta&t=raf3cVUbH4PJEyXQcJx2P_Ed8pWeSZf9vdEyQVTEq9g',
-            }}
-        />
-        
-        <ListItem.Content>
-            <ListItem.Title style={{fontWeight:"800"}}>
-               Youtube chat
-            </ListItem.Title>
-            <ListItem.Subtitle numberOfLines={1} ellipsizeMode='tail'>
-                this is test subtitle this is test subtitlethis is test subtitlethis is test subtitlethis is test subtitlethis is test subtitlethis is test subtitle
-            </ListItem.Subtitle>
-        
-        </ListItem.Content>
-
-   </ListItem>
-  )
-}
-
-
-const styles = StyleSheet.create({
+        >
+          <ListItem>
+            <Avatar
+              rounded
+              source={{
+                uri: imageUrl,
+              }}
+            />
+            <ListItem.Content>
+              <ListItem.Title style={{ fontWeight: '800' }}>Youtube chat</ListItem.Title>
+              <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
+                this is test subtitle this is test subtitlethis is test subtitlethis is test
+                subtitlethis is test subtitlethis is test subtitlethis is test subtitle
+              </ListItem.Subtitle>
+            </ListItem.Content>
+          </ListItem>
+        </TouchableOpacity>
+      );
+    };
     
-});
+    const styles = StyleSheet.create({
+      touchable: {
+        overflow: 'hidden',
+      },
+      
+    });
+    

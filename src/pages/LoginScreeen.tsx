@@ -4,7 +4,7 @@ import { Button, Image } from "@rneui/base";
 import { StatusBar, StyleSheet, Text, View, KeyboardAvoidingView, Alert, Keyboard } from "react-native"
 import { Input } from "@rneui/themed";
 import { useNavigation } from '@react-navigation/native';
-import { AuthContext } from '../context/chat/AuthContext';
+import { AuthContext } from '../context/auth/AuthContext';
 
 
 

@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoginScreeen } from '../pages/LoginScreeen';
 import { RegisterScreen } from '../pages/RegisterScreen';
-import { AuthContext } from '../context/chat/AuthContext';
+import { AuthContext } from '../context/auth/AuthContext';
 import { HomeScreen } from '../pages/HomeScreen';
+import { ChatScreen } from '../pages/ChatScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,7 +30,11 @@ export const StackNavigation = () => {
             <Stack.Screen name="Login" component={LoginScreeen} />
             <Stack.Screen name="Register" component={RegisterScreen} /> 
           </>
-          : <Stack.Screen name="home" component={HomeScreen} />
+          : 
+          <>
+            <Stack.Screen name="home" component={HomeScreen} />
+            <Stack.Screen name="chat" component={ChatScreen} />
+          </>
 
       }
    

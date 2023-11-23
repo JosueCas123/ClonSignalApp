@@ -3,8 +3,10 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { HomeScreen } from './src/pages/HomeScreen'
 import { StackNavigation } from './src/navigation/StackNavigation';
-import { AuthProvider } from './src/context/chat/AuthContext';
+import { AuthProvider } from './src/context/auth/AuthContext';
 import React = require('react');
+import { SocketProvider } from './src/context/SocketContext';
+import { ChatProvider } from './src/context/chat/ChatContext';
 
 const AppState = ({children}:any) => {
   return (
@@ -17,9 +19,13 @@ const AppState = ({children}:any) => {
 const App = () => {
   return (
     <NavigationContainer>
-      <AppState>
-        <StackNavigation/>
-      </AppState>
+        <AppState>
+          <ChatProvider>
+            <SocketProvider>
+              <StackNavigation/>
+            </SocketProvider>
+          </ChatProvider>
+        </AppState>
     </NavigationContainer>
   )
 }
