@@ -42,7 +42,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     //escuchar los cambios en los usuarios conectados
     useEffect(() => {
-        socket?.on('lista-usuarios', (usuarios) => {
+        socket?.on('lista-usuarios', (usuarios:any) => {
            
            if (dispatch) {
             dispatch({
@@ -55,7 +55,14 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
  
     }, [socket,dispatch])
     
-    
+    useEffect(() => {
+        socket?.on('message-personal', (mensaje:any) => {
+            dispatch({
+                type: types.nuevoMensaje,
+                payload:mensaje
+            })
+        })
+    },[socket, dispatch])
     
     return (
         <SocketContext.Provider value={{

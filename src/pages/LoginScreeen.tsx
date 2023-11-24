@@ -86,7 +86,7 @@ export const LoginScreeen = () => {
           title="Register" 
           
           type='outline'
-          onPress={() => navigation.navigate('Register',)}
+          onPress={() => navigation.navigate('Register')}
         />
         
     </KeyboardAvoidingView>

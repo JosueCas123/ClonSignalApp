@@ -17,8 +17,10 @@ export const CustomListItems = ({usuairoList}:Props) => {
     
     const navigation = useNavigation()
     const {user, logOut} =  useContext(AuthContext)
-    const {dispatch} = useContext(ChatContext)
-
+    const {chatState, dispatch} = useContext(ChatContext)
+    
+    const menssge = chatState.mensajes
+    console.log(menssge)
     const {uid}= usuairoList
     // Verificar si usuairoList.imageUrl es una cadena no vacía antes de usarla
   const imageUrl = usuairoList.imageUrl.trim() !== '' ? usuairoList.imageUrl : 'URL_POR_DEFECTO';
@@ -36,7 +38,7 @@ export const CustomListItems = ({usuairoList}:Props) => {
         type:types.cargarMensajes,
         payload: resp.data.mensajes
     })
-    navigation.navigate('chat')
+    navigation.navigate('chat', {usuairoList} )
   }
 
     useLayoutEffect(() => {
@@ -102,10 +104,9 @@ export const CustomListItems = ({usuairoList}:Props) => {
               }}
             />
             <ListItem.Content>
-              <ListItem.Title style={{ fontWeight: '800' }}>Youtube chat</ListItem.Title>
+              <ListItem.Title style={{ fontWeight: '800' }}>{usuairoList.nombre}</ListItem.Title>
               <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
-                this is test subtitle this is test subtitlethis is test subtitlethis is test
-                subtitlethis is test subtitlethis is test subtitlethis is test subtitle
+                Hola como estas 
               </ListItem.Subtitle>
             </ListItem.Content>
           </ListItem>
